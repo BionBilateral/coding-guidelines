@@ -353,4 +353,4 @@ These pods have been vetted and their use is encouraged:
 - [GRMustache](https://github.com/groue/GRMustache), an iOS/OSX implementation of [Mustache templates](http://mustache.github.io/)
 - [STTwitter](https://github.com/nst/STTwitter), a Twitter 1.1 API wrapper
 - [XMLDictionary](https://github.com/nicklockwood/XMLDictionary), provides methods to transform a XML response into an NSDictionary
-- [LiveFrost](https://github.com/radi/LiveFrost), performant real time blurring with support for iOS (more customizable than `UIVisualEffectView`)
+- [LiveFrost](https://github.com/radi/LiveFrost), performant real time blurring with support for iOS 6+ (more customizable than `UIVisualEffectView`)
