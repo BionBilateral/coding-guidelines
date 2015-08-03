@@ -1,8 +1,6 @@
 ##Objective-C
 
-This document details the coding style and conventions followed by Bion Bilateral.
-
-This document assumes you are using Xcode.
+This document details coding style and coding conventions for Objective-C. This document assumes you are using Xcode.
 
 ##Coding Style
 
