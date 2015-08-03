@@ -279,6 +279,12 @@ Key value observing and key value coding should be used instead of delegation wh
     
     @end
 
+##Debugging
+
+###Push Notifications
+
+[NWPusher](https://github.com/noodlewerk/NWPusher) is a useful tool for debugging push notifications. Just pick a cert and device id and it allows you manually send push notifications with a desired payload.
+
 ##Dependency Management
 
 ###CocoaPods
