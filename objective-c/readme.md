@@ -1,4 +1,4 @@
-##Bion Bilateral Objective-C
+##Objective-C
 
 This document details the coding style and conventions followed by Bion Bilateral.
 
