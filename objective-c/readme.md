@@ -46,96 +46,108 @@ The file structure of your Xcode project should be as flat as possible. Use grou
 
 Use the `NS_ENUM` macro to define and list enum values. For example:
 
+```objc
+/**
+ Enum describing the authorization status of the AddressBook framework.
+ */
+typedef NS_ENUM(NSInteger, BBAddressBookManagerAuthorizationStatus) {
     /**
-     Enum describing the authorization status of the AddressBook framework.
+     The status has not been determined for the calling application. The appropriate alert will be shown to grant access upon request.
      */
-    typedef NS_ENUM(NSInteger, BBAddressBookManagerAuthorizationStatus) {
-        /**
-         The status has not been determined for the calling application. The appropriate alert will be shown to grant access upon request.
-         */
-        BBAddressBookManagerAuthorizationStatusNotDetermined = kABAuthorizationStatusNotDetermined,
-        /**
-         The status has been restricted and the current user may not be able to modify it.
-         */
-        BBAddressBookManagerAuthorizationStatusRestricted = kABAuthorizationStatusRestricted,
-        /**
-         The user has denied access to the calling application. Prompt the user to adjust access in the Settings application.
-         */
-        BBAddressBookManagerAuthorizationStatusDenied = kABAuthorizationStatusDenied,
-        /**
-         The user has granted access to the calling application.
-         */
-        BBAddressBookManagerAuthorizationStatusAuthorized = kABAuthorizationStatusAuthorized
-    };
+    BBAddressBookManagerAuthorizationStatusNotDetermined = kABAuthorizationStatusNotDetermined,
+    /**
+     The status has been restricted and the current user may not be able to modify it.
+     */
+    BBAddressBookManagerAuthorizationStatusRestricted = kABAuthorizationStatusRestricted,
+    /**
+     The user has denied access to the calling application. Prompt the user to adjust access in the Settings application.
+     */
+    BBAddressBookManagerAuthorizationStatusDenied = kABAuthorizationStatusDenied,
+    /**
+     The user has granted access to the calling application.
+     */
+    BBAddressBookManagerAuthorizationStatusAuthorized = kABAuthorizationStatusAuthorized
+};
+```
 
 The general pattern being:
 
-    typedef NS_ENUM(<type>, <prefix>) {
-        <prefix><suffix1> = <optional_value1>,
-        <prefix><suffix2> = <optional_value2>,
-        ...
-    }
+```objc
+typedef NS_ENUM(<type>, <prefix>) {
+    <prefix><suffix1> = <optional_value1>,
+    <prefix><suffix2> = <optional_value2>,
+    ...
+}
+```
 
 ###Options
 
 Use the `NS_OPTIONS` macro to define and list option values. For example:
 
+```objc
+/**
+ Flags describing the cache type that is used to store generated thumbnails.
+ */
+typedef NS_OPTIONS(NSInteger, BBThumbnailGeneratorCacheOptions) {
     /**
-     Flags describing the cache type that is used to store generated thumbnails.
+     Caching is not enabled, the thumbnail will be generated each time it is requested.
      */
-    typedef NS_OPTIONS(NSInteger, BBThumbnailGeneratorCacheOptions) {
-        /**
-         Caching is not enabled, the thumbnail will be generated each time it is requested.
-         */
-        BBThumbnailGeneratorCacheOptionsNone = 0,
-        /**
-         File caching is enabled, the generated thumbnail will be stored on disk.
-         */
-        BBThumbnailGeneratorCacheOptionsFile = 1 << 0,
-        /**
-         Memory caching is enabled, the generated thumbnail will be stored in memory.
-         */
-        BBThumbnailGeneratorCacheOptionsMemory = 1 << 1
-    };
+    BBThumbnailGeneratorCacheOptionsNone = 0,
+    /**
+     File caching is enabled, the generated thumbnail will be stored on disk.
+     */
+    BBThumbnailGeneratorCacheOptionsFile = 1 << 0,
+    /**
+     Memory caching is enabled, the generated thumbnail will be stored in memory.
+     */
+    BBThumbnailGeneratorCacheOptionsMemory = 1 << 1
+};
+```
 
 The general pattern being:
 
-    typedef NS_OPTIONS(<type>, <prefix>) {
-        <prefix><suffix1> = <value1>,
-        <prefix><suffix2> = <value2>,
-        ...
-    }
+```objc
+typedef NS_OPTIONS(<type>, <prefix>) {
+    <prefix><suffix1> = <value1>,
+    <prefix><suffix2> = <value2>,
+    ...
+}
+```
 
 ##Class Interface, Extension, and Implementation
 
 Do not use instance variables, use properties:
 
-    @interface MyClass : NSObject
-    
-    @property (copy,nonatomic) NSString *myString;
-    
-    @end
-    
-    @interface MyClass ()
-    @property (copy,nonatomic) NSString *myString;
-    @end
+```objc
+@interface MyClass : NSObject
+
+@property (copy,nonatomic) NSString *myString;
+
+@end
+
+@interface MyClass ()
+@property (copy,nonatomic) NSString *myString;
+@end
+```
 
 Instead of:
 
-    @interface MyClass : NSObject {
-        NSString *_myString;
-    }
-    @end
-    
-    @interface MyClass () {
-        NSString *_myString;
-    }
-    @end
-    
-    @implementation MyClass {
-        NSString *_myString;
-    }
-    @end
+```objc
+@interface MyClass : NSObject {
+    NSString *_myString;
+}
+@end
+
+@interface MyClass () {
+    NSString *_myString;
+}
+@end
+
+@implementation MyClass {
+    NSString *_myString;
+}
+@end
+```
 
 ###Properties
 
@@ -145,74 +157,92 @@ Instead of:
 - The `atomic` attribute is rarely needed, there is a huge difference between atomicity and thread safety
 - Private properties should be declared in a class extension
 
-        @interface MyClass ()
-        @property (copy,nonatomic) NSString *myString;
-        @end
+```objc
+@interface MyClass ()
+@property (copy,nonatomic) NSString *myString;
+@end
+```
 
 - If a property should be read only publicly and readwrite privately, redefine it within the class extension
 
-        @interface MyClass : NSObject
-        @property (readonly,copy,nonatomic) NSString *myString;
-        @end
-        
-        @interface MyClass ()
-        @property (readwrite,copy,nonatomic) NSString *myString;
-        @end
-    
+```objc
+@interface MyClass : NSObject
+@property (readonly,copy,nonatomic) NSString *myString;
+@end
+
+@interface MyClass ()
+@property (readwrite,copy,nonatomic) NSString *myString;
+@end
+```
+ 
 ###Methods
 
 - Use verbose method names, this is not vanilla C
 - Do not prefix methods with _get_, this is not Java
 
-        // Do this
-        @interface MyClass : NSObject
-        - (void)foo;
-        @end
-        
-        // Not this
-        @interface MyClass : NSObject
-        - (void)getFoo;
-        @end
+```objc
+// Do this
+@interface MyClass : NSObject
+- (void)foo;
+@end
+
+// Not this
+@interface MyClass : NSObject
+- (void)getFoo;
+@end
+```
 
 - The exception to the above rule are methods that return multiple values by reference
 
-        @interface UIColor : NSObject
-        - (BOOL)getRed:(CGFloat *)red green:(CGFloat *)green blue:(CGFloat *)blue alpha:(CGFloat *)alpha;
-        @end
-    
+```objc
+@interface UIColor : NSObject
+- (BOOL)getRed:(CGFloat *)red green:(CGFloat *)green blue:(CGFloat *)blue alpha:(CGFloat *)alpha;
+@end
+```
+
 - Methods that provide additional error information should do so using an `NSError` returned by reference and indicate success or failure using a boolean return value
 
-        @interface MyClass : NSObject
-        - (BOOL)fooBar:(NSError **)error;
-        @end
+```objc
+@interface MyClass : NSObject
+- (BOOL)fooBar:(NSError **)error;
+@end
+```
 
 - Action methods intended for attachment to UI controls should follow the below convention which allows Xcode to properly index the methods and allow for hookup within Interface Builder
 
-        @interface MyClass : NSObject
-        - (IBAction)myAction:(id)sender;
-        @end
+```objc
+@interface MyClass : NSObject
+- (IBAction)myAction:(id)sender;
+@end
+```
 
 - Methods belonging to a data source or delegate protocol should always include the caller as the first parameter of the method
 
-        @protocol MyClassDataSource
-        - (NSInteger)numberOfThingsInMyClass:(MyClass *)myClass;
-        - (id)myClass:(MyClass *)myClass thingAtIndex:(NSInteger)index;
-        @end
+```objc
+@protocol MyClassDataSource
+- (NSInteger)numberOfThingsInMyClass:(MyClass *)myClass;
+- (id)myClass:(MyClass *)myClass thingAtIndex:(NSInteger)index;
+@end
+```
 
 - Private methods should be prefixed with `_`
 
-        @interface MyClass ()
-        - (void)_myPrivateMethod;
-        @end
+```objc
+@interface MyClass ()
+- (void)_myPrivateMethod;
+@end
+```
 
 ###Variables
 
 - Use verbose variable names, this is not vanilla C
 - Single letter variable names should be used where notation is appropriate
 
-        for (NSInteger i=0; i<count; i++) {
-            // do stuff
-        }
+```objc
+for (NSInteger i=0; i<count; i++) {
+    // do stuff
+}
+```
 
 - For primitive types, use the Apple provided typedefs
     - `int` becomes `NSInteger`
@@ -246,38 +276,40 @@ Delegation should be used when a tighter coupling should exist between classes, 
 
 Key value observing and key value coding should be used instead of delegation when a tighter coupling should exist between the classes but multiple parties would be interested in the change, as delegation can only inform a single party. For example, `WKWebView` is key value observing compliant for its `loading` property, which can be observed by interested parties to know when the loading status has changed.
 
-    static void *kObservingContext = &kObservingContext;
+```objc
+static void *kObservingContext = &kObservingContext;
+
+@interface MyClass ()
+@property (strong,nonatomic) WKWebView *webView;
+@end
+
+@implementation MyClass
+
+- (void)dealloc {
+    [self.webView removeObserver:self forKeyPath:@"loading" context:kObservingContext];
+}
+
+- (void)viewDidLoad {
+    [self.webView addObserver:self forKeyPath:@"loading" options:0 context:kObservingContext];
     
-    @interface MyClass ()
-    @property (strong,nonatomic) WKWebView *webView;
-    @end
-    
-    @implementation MyClass
-    
-    - (void)dealloc {
-        [self.webView removeObserver:self forKeyPath:@"loading" context:kObservingContext];
-    }
-    
-    - (void)viewDidLoad {
-        [self.webView addObserver:self forKeyPath:@"loading" options:0 context:kObservingContext];
-        
-        // classes we manage can also observe our WKWebView instance and react to changes
-    }
-    
-    // override category method defined on NSObject to observe changes
-    - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-        if (context == kObservingContext) {
-            if ([keyPath isEqualToString:@"loading"]) {
-                // do stuff
-            }
-        }
-        // call super if the observation is not meant for us
-        else {
-            [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    // classes we manage can also observe our WKWebView instance and react to changes
+}
+
+// override category method defined on NSObject to observe changes
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if (context == kObservingContext) {
+        if ([keyPath isEqualToString:@"loading"]) {
+            // do stuff
         }
     }
-    
-    @end
+    // call super if the observation is not meant for us
+    else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+@end
+```
 
 ##Debugging
 
